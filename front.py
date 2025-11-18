@@ -4,7 +4,7 @@ from PIL import Image
 from tkinter import PhotoImage
 
 # --- GET THE SCRIPT'S OWN DIRECTORY ---
-script_directory = os.path.dirname(os.path.abspath(__file__))
+script_directory = os.path.dirname(os.path.abspath("MovieRecommenderApp/front.py"))
 
 class MovieAppUI(ctk.CTk):
     def __init__(self):
@@ -26,20 +26,17 @@ class MovieAppUI(ctk.CTk):
         self.grid_rowconfigure(5, weight=1) 
 
         # --- Load Window Icon (.png) ---
+        icon_path= os.path.join(script_directory, "icon.ico")
         try:
-            icon_path = os.path.join(script_directory, "icon.png") # Assumes icon.png
-            self.icon_image = PhotoImage(file=icon_path)
-            self.iconphoto(False, self.icon_image)
+            self.iconbitmap(icon_path)
         except Exception as e:
-            print(f"Error loading window icon: {e}")
-            print("Please make sure 'icon.png' is in the same folder as the script.")
-
+            print(f"Error: Could not load window icon from {icon_path}: {e}")
 
         # --- Load Icons (Back to WHITE icons) ---
         try:
             # --- UPDATED ICON NAMES (no _dark) ---
-            genre_icon_path = os.path.join(script_directory, "genre_icon.png")
-            year_icon_path = os.path.join(script_directory, "year_icon.png")
+            genre_icon_path = os.path.join("MovieRecommenderApp", "icon_genre.png")
+            year_icon_path = os.path.join("MovieRecommenderApp", "icon_calendar.png")
             rating_icon_path = os.path.join(script_directory, "rating_icon.png")
 
             self.genre_icon = ctk.CTkImage(Image.open(genre_icon_path), size=(20, 20))
@@ -130,7 +127,7 @@ class MovieAppUI(ctk.CTk):
         label_r.pack(anchor="w", pady=(0, 10))
         self.rating_var = ctk.DoubleVar(value=6.0)
         self.rating_slider = ctk.CTkSlider(
-            box_rating, from_=0, to=10, number_of_steps=10, 
+            box_rating, from_=0, to=9, number_of_steps=9, 
             variable=self.rating_var, command=self.update_rating_label,
             width=200, height=18, button_color="#E91E63", button_hover_color="#C2185B",
             progress_color="#E91E63"
@@ -204,19 +201,6 @@ class MovieAppUI(ctk.CTk):
         print(f"ML Search initiated for: '{keywords}'")
         print(f"Filters: {genre} | {year} | Rating > {rating}")
         
-        # --- THIS IS WHERE YOU PUT YOUR CODE ---
-        #
-        # You can now pass the 'keywords' variable to your ML function.
-        #
-        # EXAMPLE:
-        # results = your_ml_backend.get_recommendations(
-        #     keywords=keywords,
-        #     genre_filter=genre,
-        #     year_era=year,
-        #     min_rating=rating
-        # )
-        #
-        # ----------------------------------------
         
         self.results_placeholder.configure(text="Processing data...")
 
